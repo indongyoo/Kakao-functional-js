@@ -13,7 +13,7 @@
 - https://api.iamport.kr/
 
 <script type="module">
-const { delay, L, go, map, each, flat, join } = fx;
+const { delay, L, C, go, map, each, flat, join } = fx;
 
 const Impt = {
   payments: {
@@ -37,9 +37,12 @@ const Impt = {
   },
   getPayments: page => {
     console.log(`http://..?page=${page}`);
-    return delay(1000 * 1, Impt.payments[page]);
+    return delay(1000, Impt.payments[page]);
   },
-  cancelPayment: imp_id => Promise.resolve(`${imp_id} 취소완료`)
+  cancelPayment: async imp_id => {
+    await delay(1000, undefined);
+    log(`${imp_id} 취소완료`);
+  }
 };
 
 const DB = {

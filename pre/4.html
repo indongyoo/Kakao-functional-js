@@ -39,7 +39,10 @@ const Impt = {
     console.log(`http://..?page=${page}`);
     return delay(1000 * 1, Impt.payments[page]);
   },
-  cancelPayment: imp_id => Promise.resolve(`${imp_id} 취소완료`)
+  cancelPayment: async imp_id => {
+    await delay(1000, undefined);
+    log(`${imp_id} 취소완료`);
+  }
 };
 
 const DB = {
@@ -84,8 +87,7 @@ async function job() {
     payments,
     L.reject(p => orderIds.includes(p.order_id)),
     L.map(p => p.imp_id),
-    map(Impt.cancelPayment),
-    each(log));
+    C.map(Impt.cancelPayment));
 
   console.log('job 끝');
 }
