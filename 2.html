@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>2</title>
+  <script>const {log, clear} = console;</script>
+  <script src="fx.js"></script>
+</head>
+<body>
+
+6. 축약하는 함수 reduce
+- reduce, add
+<script type="module">
+</script>
+
+- count
+<script type="module">
+</script>
+
+7. 함수를 다루는 함수
+- go
+- pipe
+<script type="module">
+</script>
+
+- curry
+<script type="module">
+</script>
+
+8. 2차원 배열 다루기 flat
+- L.flat
+<script type="module">
+</script>
+
+- 리얼월드, users
+<script type="module">
+const users = [
+  { name: 'a', age: 21, family: [
+    { name: 'a1', age: 53 }, { name: 'a2', age: 47 },
+    { name: 'a3', age: 16 }, { name: 'a4', age: 14 }
+  ] },
+  { name: 'b', age: 24, family: [
+    { name: 'b1', age: 58 }, { name: 'b2', age: 51 },
+    { name: 'b3', age: 10 }, { name: 'b4', age: 22 }
+  ] },
+  { name: 'c', age: 31, family: [
+    { name: 'c1', age: 64 }, { name: 'c2', age: 62 }
+  ] },
+  { name: 'd', age: 20, family: [
+    { name: 'd1', age: 42 }, { name: 'd2', age: 42 },
+    { name: 'd3', age: 11 }, { name: 'd4', age: 7 }
+  ] }
+];
+</script>
+
+9. 커머스 데이터 다루기
+- 간단한 장바구니
+<script type="module">
+const products = [
+  { name: '반팔티', price: 15000, quantity: 1, is_selected: true },
+  { name: '긴팔티', price: 20000, quantity: 2, is_selected: false },
+  { name: '핸드폰케이스', price: 15000, quantity: 3, is_selected: true },
+  { name: '후드티', price: 30000, quantity: 4, is_selected: false },
+  { name: '바지', price: 25000, quantity: 5, is_selected: false }
+];
+</script>
+
+- 복잡한 장바구니
+<script type="module">
+const products = [
+  {
+    name: '반팔티', price: 15000, is_selected: true,
+    options: [
+      { name: 'M', price: 0, quantity: 1 },
+      { name: 'L', price: 0, quantity: 2 },
+      { name: 'XL', price: 2000, quantity: 3 }
+    ]
+  },
+  {
+    name: '긴팔티', price: 20000, is_selected: false,
+    options: [
+      { name: 'M', price: 0, quantity: 1 },
+      { name: 'L', price: 0, quantity: 2 },
+      { name: 'XL', price: 2000, quantity: 3 }
+    ]
+  },
+  {
+    name: '핸드폰케이스', price: 15000, is_selected: true,
+    options: [
+      { name: '유광', price: 0, quantity: 1 },
+      { name: '무광', price: 0, quantity: 2 },
+      { name: '범퍼케이스', price: 4000, quantity: 3 }
+    ]
+  }
+];
+</script>
+
+
+
+</body>
+</html>

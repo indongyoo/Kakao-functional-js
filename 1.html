@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>1</title>
+  <script>const {log, clear} = console;</script>
+  <script src="fx.js"></script>
+</head>
+<body>
+
+1. ES6+ 기본기
+
+- 이터러블
+  - 순회 가능한 값.
+  - iterable[Symbol.iterator]()로 이터레이터를 리턴하는 값.
+<script>
+</script>
+
+- for...of 가 내부적으로 하는 일
+- 이터레이터
+  - iterator.next()가 { value: Any, done: Boolean }를 리턴하는 값
+<script>
+</script>
+
+- 제너레이터
+  - 실행하면 이터레이터를 반환하는 함수
+  - yield 로 next()의 value 값을 발생
+  - return 을 하면 { done: true }
+<script type="module">
+</script>
+
+2. map, filter
+- map
+- filter
+<script type="module">
+</script>
+
+3. 이터러블 프로토콜로 다시 만들기
+- L.map
+- L.filter
+- L.take
+- L.takeUntil
+
+<script type="module">
+</script>
+
+4. 지연 평가와 제너레이터
+- range
+- 동작 순서와 효율
+<script type="module">
+</script>
+
+5. 명령형을 이터러블 프로그래밍으로 전환 1
+- 홀수 n개 더하기 명령형 코드
+- if를 filter로
+- 값 변화 후 변수 할당을 map으로
+- break를 take로
+- 합산을 reduce로
+- 효율 비교
+
+<script type="module">
+</script>
+
+</body>
+</html>
