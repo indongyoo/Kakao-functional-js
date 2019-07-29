@@ -14,12 +14,37 @@
   - 순회 가능한 값.
   - iterable[Symbol.iterator]()로 이터레이터를 리턴하는 값.
 <script>
+const arr = [1, 2, 3, 4];
+// arr[Symbol.iterator] = null;
+// for (const a of arr) {
+//   log(a);
+// }
+// const iterator = arr[Symbol.iterator]();
+// log(iterator.next());
+// log(iterator.next());
+// log(iterator.next());
 </script>
 
 - for...of 가 내부적으로 하는 일
 - 이터레이터
   - iterator.next()가 { value: Any, done: Boolean }를 리턴하는 값
 <script>
+// for (const a of arr) {
+//   log(a);
+// }
+
+const iterator = arr[Symbol.iterator]();
+while (true) {
+  const { value, done } = iterator.next();
+  if (done) break;
+  const a = value;
+  log(a);
+}
+log([...arr, ...[3]]);
+
+// const [head, ...tail] = [1,2,3,4,5,6];
+// log(head);
+// log(tail);
 </script>
 
 - 제너레이터
@@ -27,12 +52,45 @@
   - yield 로 next()의 value 값을 발생
   - return 을 하면 { done: true }
 <script type="module">
+function* gen() {
+  yield 10;
+  yield 20;
+  yield 30;
+  return 100000;
+}
+for (const a of gen()) log(a);
+
+// const it = gen();
+// log(it.next());
+// log(it.next());
+// log(it.next());
+// log(it.next());
+clear();
 </script>
 
 2. map, filter
 - map
 - filter
 <script type="module">
+function map(f, iterable) {
+  let res = [];
+  for (const a of iterable) {
+    res.push(f(a));
+  }
+  return res;
+}
+
+function filter(f, iterable) {
+  let res = [];
+  for (const a of iterable) {
+    if (f(a)) res.push(a);
+  }
+  return res;
+}
+
+log(map(a => a + 10, [1, 2, 3]));
+log(map(a => a.toUpperCase(), ['a', 'b', 'c']));
+log(filter(a => a % 2, [1, 2, 3, 4]));
 </script>
 
 3. 이터러블 프로토콜로 다시 만들기
@@ -42,23 +100,128 @@
 - L.takeUntil
 
 <script type="module">
+const L = {};
+L.map = function* (f, iterable) {
+  for (const a of iterable) yield f(a);
+};
+L.filter = function* (f, iterable) {
+  for (const a of iterable) if (f(a)) yield a;
+};
+// L.take = function* (l, iterable) {
+//   for (const a of iterable) {
+//     yield a;
+//     if (--l == 0) break;
+//   }
+// };
+L.take = function (l, iterable) {
+  return L.takeUntil(_ => --l == 0,iterable);
+};
+L.takeUntil = function* (f, iterable) {
+  for (const a of iterable) {
+    yield a;
+    if (f(a)) break;
+  }
+};
+const it = L.take(2, [1, 2, 3, 4, 5]);
+log([...L.take(2, [1, 2, 3, 4, 5])]);
+
+log([...L.takeUntil(a => a == 3, [1, 2, 3, 4, 5, 6])]);
+// log(it.next());
+// log(it.next());
+// log(it.next());
+// [1, 2]
+
+// const it = L.map(a => a * 10, [1, 2, 3, 4]);
+// const it2 = L.filter(a => a % 2, [1, 2, 3, 4]);
+// log([...it]);
+// log([...it2]);
+// log(it.next());
+// log(it.next());
+// log(it.next());
+// log(it.next());
+clear();
 </script>
 
 4. 지연 평가와 제너레이터
 - range
 - 동작 순서와 효율
 <script type="module">
+L.range = function* (start, stop, step = 1) {
+  while (start < stop) {
+    yield start;
+    start += step;
+  }
+};
+// const it = L.range(0, Infinity);
+// log(it);
+// log(it.next());
+// log(it.next());
+log(take(2, L.range(0, Infinity)));
+
+// let l = 2, res = [];
+// while (true) {
+//   const { value, done } = lazy.next();
+//   if (done) break;
+//   log(value);
+//   if (--l == 0) break;
+// }
+//
+
+// for (const a of lazy) {
+//   res.push(a);
+//   if (--l == 0) break;
+// }
+// log(res);
+
+const it =
+  [...L.take(3,
+    L.filter(a => {
+      log('filter', a);
+      return a % 2
+    },
+      L.map(a => {
+        log('map', a);
+        return a + 10;
+      }, L.range(0, Infinity))))];
+
+log(it);
+// log(it.next());
+// log(it.next());
+// log(it.next());
+clear();
 </script>
 
 5. 명령형을 이터러블 프로그래밍으로 전환 1
 - 홀수 n개 더하기 명령형 코드
-- if를 filter로
-- 값 변화 후 변수 할당을 map으로
-- break를 take로
-- 합산을 reduce로
-- 효율 비교
 
 <script type="module">
+function f1(limit, iterable) {
+  let acc = 0;
+  for (let a of iterable) {
+    if (a % 2) {
+      a = a * a;
+      acc = acc + a;
+      if (--limit == 0) break;
+    }
+  }
+  log(acc);
+}
+f1(3, [1, 2, 4, 3, 4, 5, 7, 100, 2, 4]);
+
+// - if를 filter로
+// - 값 변화 후 변수 할당을 map으로
+// - break를 take로
+// - 합산을 reduce로
+// - 효율 비교
+const add = (a, b) => a + b;
+
+const f2 = (limit, iterable) =>
+  reduce(add, 0,
+    L.take(limit,
+      L.map(a => a * a,
+        L.filter(a => a % 2, iterable))));
+
+log(f2(3, [1, 2, 4, 3, 4, 5, 7, 100, 2, 4]));
 </script>
 
 </body>
